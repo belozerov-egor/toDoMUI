@@ -1,9 +1,13 @@
 
-import { appActions} from '../../app/app-reducer'
-import {authAPI, LoginParamsType} from '../../api/todolists-api'
+import { appActions} from '../../app/app.reducer'
 import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AppThunk } from 'app/store'
+import {AppThunk} from "../../app/store";
+import {authAPI, LoginParamsType} from "../auth/auth.api";
+import {todolistsActions} from "../TodolistsList/todolists.reducer";
+import {tasksActions} from "../TodolistsList/tasks.reducer";
+
+
 
 
 const initialState: InitialStateType = {
@@ -48,6 +52,8 @@ export const logoutTC = (): AppThunk => (dispatch) => {
             if (res.data.resultCode === 0) {
                 dispatch(authActions.setIsLoggedIn({isLoggedIn: false}))
                 dispatch(appActions.setAppStatus({status:'succeeded'}))
+                // dispatch(todolistsActions.deleteTodolists())
+                // dispatch(tasksActions.deleteTasks())
             } else {
                 handleServerAppError(res.data, dispatch)
             }
