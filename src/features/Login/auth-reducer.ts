@@ -1,11 +1,10 @@
 
-import { appActions} from '../../app/app.reducer'
-import {handleServerAppError, handleServerNetworkError} from '../../utils/error-utils'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import {AppThunk} from "../../app/store";
+
+import { appActions } from 'app/app.reducer';
 import {authAPI, LoginParamsType} from "../auth/auth.api";
-import {todolistsActions} from "../TodolistsList/todolists.reducer";
-import {tasksActions} from "../TodolistsList/tasks.reducer";
+import {AppThunk} from "../../app/store";
+import {handleServerAppError, handleServerNetworkError} from "../../common/utils";
 
 
 
@@ -52,8 +51,6 @@ export const logoutTC = (): AppThunk => (dispatch) => {
             if (res.data.resultCode === 0) {
                 dispatch(authActions.setIsLoggedIn({isLoggedIn: false}))
                 dispatch(appActions.setAppStatus({status:'succeeded'}))
-                // dispatch(todolistsActions.deleteTodolists())
-                // dispatch(tasksActions.deleteTasks())
             } else {
                 handleServerAppError(res.data, dispatch)
             }
