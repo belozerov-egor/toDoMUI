@@ -1,14 +1,15 @@
 import React from "react";
-import { useFormik } from "formik";
-import { useSelector } from "react-redux";
-import { loginTC } from "features/auth/auth.reducer";
-import { Navigate } from "react-router-dom";
-import { useAppDispatch } from "common/hooks/useAppDispatch";
-import { Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField } from "@mui/material";
-import { selectIsLoggedIn } from "features/auth/auth.selectors";
+import {useFormik} from "formik";
+import {useSelector} from "react-redux";
+import {Navigate} from "react-router-dom";
+import {Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, TextField} from "@mui/material";
+import {selectIsLoggedIn} from "features/auth/auth.selectors";
+import {useActions} from "../../common/hooks/useActions";
+import {authThunks} from "./auth.reducer";
 
 export const Login = () => {
-  const dispatch = useAppDispatch();
+
+  const {login} = useActions(authThunks)
 
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
@@ -31,7 +32,7 @@ export const Login = () => {
       rememberMe: false,
     },
     onSubmit: (values) => {
-      dispatch(loginTC(values));
+      login(values)
     },
   });
 
