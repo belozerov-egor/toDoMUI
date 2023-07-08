@@ -4,8 +4,8 @@ import {EditableSpan} from "common/components/EditableSpan/EditableSpan";
 import {Delete} from "@mui/icons-material";
 import {TaskStatuses} from "common/enums";
 import {TaskType} from "../../todolists.types";
-import {useActions} from "../../../../common/hooks/useActions";
-import {tasksActions, tasksThunks} from "../../tasks.reducer";
+import {tasksThunks} from "../../tasks.reducer";
+import {useActions} from "common/hooks";
 
 type TaskPropsType = {
     task: TaskType
@@ -15,10 +15,8 @@ export const Task: FC<TaskPropsType> = memo((props) => {
     const {todolistId, task} = props;
     const {removeTask, updateTask} = useActions(tasksThunks);
 
-    const onClickHandler = useCallback(
-        ()=>   removeTask({taskId: task.id, todolistId}),
-        [task.id, todolistId]
-    );
+    const onClickHandler = ()=>removeTask({taskId: task.id, todolistId});
+
 
     const onChangeHandler = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {

@@ -8,7 +8,7 @@ import {Navigate} from "react-router-dom";
 import {useAppDispatch} from "common/hooks/useAppDispatch";
 import {selectIsLoggedIn} from "features/auth/auth.selectors";
 import {selectTodolists} from "features/TodolistsList/todolists.selectors";
-import {useActions} from "../../common/hooks/useActions";
+import {useActions} from "common/hooks";
 
 
 type PropsType = {
