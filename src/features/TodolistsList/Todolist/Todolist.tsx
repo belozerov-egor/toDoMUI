@@ -16,9 +16,6 @@ type PropsType = {
   todolist: TodolistDomainType;
   changeFilter: (value: FilterValuesType, todolistId: string) => void;
   addTask: (title: string, todolistId: string) => void;
-  changeTaskStatus: (id: string, status: TaskStatuses, todolistId: string) => void;
-  changeTaskTitle: (taskId: string, newTitle: string, todolistId: string) => void;
-  removeTask: (taskId: string, todolistId: string) => void;
   changeTodolistTitle: (id: string, newTitle: string) => void;
   demo?: boolean;
 };
@@ -87,9 +84,9 @@ export const Todolist = React.memo(function ({ demo = false, todolist, ...props 
         {tasksForTodolist.map((t) => (
           <Task
             key={t.id}
-            task={t}
             todolistId={todolist.id}
-            removeTask={props.removeTask}
+            taskId={t.id}
+            title= {t.title}
             changeTaskTitle={props.changeTaskTitle}
             changeTaskStatus={props.changeTaskStatus}
           />
