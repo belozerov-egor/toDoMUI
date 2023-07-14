@@ -1,11 +1,6 @@
-import React, {useCallback, useEffect} from "react";
-import "./App.css";
-import {TodolistsList} from "features/todolists-list/todolists-list";
-import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
-import {useSelector} from "react-redux";
-import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "features/auth/Login/Login";
-import {authThunks} from "features/auth/auth.reducer";
+import React, { useCallback, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import {
   AppBar,
   Button,
@@ -16,28 +11,28 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import {Menu} from "@mui/icons-material";
-import {selectIsLoggedIn} from "features/auth/auth.selectors";
-import {selectAppStatus, selectIsInitialized} from "app/app.selectors";
-import {useActions} from "../common/hooks/useActions";
+import { Menu } from "@mui/icons-material";
+import { Login } from "features/auth/Login/Login";
+import "./App.css";
+import { TodolistsList } from "features/todolists-list/todolists-list";
+import { ErrorSnackbar } from "common/components";
+import { useActions } from "common/hooks";
+import { selectIsLoggedIn } from "features/auth/auth.selectors";
+import { selectAppStatus, selectIsInitialized } from "app/app.selectors";
+import { authThunks } from "features/auth/auth.reducer";
 
-type PropsType = {
-  demo?: boolean;
-};
-
-function App({ demo = false }: PropsType) {
+function App() {
   const status = useSelector(selectAppStatus);
   const isInitialized = useSelector(selectIsInitialized);
   const isLoggedIn = useSelector(selectIsLoggedIn);
-  const {initializeApp,logout} = useActions(authThunks)
+
+  const { initializeApp, logout } = useActions(authThunks);
 
   useEffect(() => {
-  initializeApp({});
+    initializeApp({});
   }, []);
 
-  const logoutHandler = useCallback(() => {
-  logout({});
-  }, []);
+  const logoutHandler = () => logout({});
 
   if (!isInitialized) {
     return (
@@ -56,7 +51,7 @@ function App({ demo = false }: PropsType) {
             <IconButton edge="start" color="inherit" aria-label="menu">
               <Menu />
             </IconButton>
-            <Typography variant="h6">ToDo</Typography>
+            <Typography variant="h6">News</Typography>
             {isLoggedIn && (
               <Button color="inherit" onClick={logoutHandler}>
                 Log out
@@ -67,9 +62,9 @@ function App({ demo = false }: PropsType) {
         </AppBar>
         <Container fixed>
           <Routes>
-            <Route path={"/"} element={<TodolistsList demo={demo} />} />
+            <Route path={"/"} element={<TodolistsList />} />
             <Route path={"/login"} element={<Login />} />
-            <Route path="/todoMUI" element={<Navigate to="/" replace />} />
+            <Route path={"/todolistMUI"} element={<Navigate  to="/login" />}  />
           </Routes>
         </Container>
       </div>
