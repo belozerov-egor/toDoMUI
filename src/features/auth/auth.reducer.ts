@@ -1,86 +1,41 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { appActions } from "app/app.reducer";
 import { authAPI, LoginParamsType } from "features/auth/auth.api";
 import { clearTasksAndTodolists } from "common/actions";
 import { createAppAsyncThunk, handleServerAppError, handleServerNetworkError } from "common/utils";
-import { ResultCode } from "../../common/enums";
+import { ResultCode } from "common/enums";
 
-const slice = createSlice({
-  name: "auth",
-  initialState: {
-    isLoggedIn: false,
-  },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(login.fulfilled, (state) => {
-        state.isLoggedIn = true;
-      })
-      .addCase(logout.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn;
-      })
-      .addCase(initializeApp.fulfilled, (state, action) => {
-        state.isLoggedIn = action.payload.isLoggedIn;
-      });
-  },
-});
-
-// thunks
-const login = createAppAsyncThunk<undefined, LoginParamsType>("auth/login", async (arg, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-  try {
-    dispatch(appActions.setAppStatus({ status: "loading" }));
+const login = createAppAsyncThunk<{ isLoggedIn: boolean }, LoginParamsType>(
+  "auth/login",
+  async (arg, { dispatch, rejectWithValue }) => {
     const res = await authAPI.login(arg);
     if (res.data.resultCode === ResultCode.Success) {
-      dispatch(appActions.setAppStatus({ status: "succeeded" }));
-      // return undefined
+      return { isLoggedIn: true };
     } else {
-      debugger;
       const isShowAppError = !res.data.fieldsErrors.length;
-      handleServerAppError(res.data, dispatch, isShowAppError);
-      return rejectWithValue(res.data);
+      return rejectWithValue({ data: res.data, showGlobalError: isShowAppError });
     }
-  } catch (e) {
-    debugger;
-    handleServerNetworkError(e, dispatch);
-    return rejectWithValue(null);
-  }
-});
-
-const logout = createAppAsyncThunk<
-  {
-    isLoggedIn: boolean;
   },
-  void
->("auth/logout", async (_, thunkAPI) => {
-  const { dispatch, rejectWithValue } = thunkAPI;
-  try {
-    dispatch(appActions.setAppStatus({ status: "loading" }));
+);
+
+const logout = createAppAsyncThunk<{ isLoggedIn: boolean }, void>(
+  "auth/logout",
+  async (_, { dispatch, rejectWithValue }) => {
     const res = await authAPI.logout();
     if (res.data.resultCode === ResultCode.Success) {
       dispatch(clearTasksAndTodolists());
-      dispatch(appActions.setAppStatus({ status: "succeeded" }));
       return { isLoggedIn: false };
     } else {
       handleServerAppError(res.data, dispatch);
       return rejectWithValue(null);
     }
-  } catch (e) {
-    handleServerNetworkError(e, dispatch);
-    return rejectWithValue(null);
-  }
-});
-
-const initializeApp = createAppAsyncThunk<
-  {
-    isLoggedIn: boolean;
   },
-  void
->("app/initializeApp", async (_, thunkAPI) => {
+);
+
+const initializeApp = createAppAsyncThunk<{ isLoggedIn: boolean }, void>("app/initializeApp", async (_, thunkAPI) => {
   const { dispatch, rejectWithValue } = thunkAPI;
   try {
     const res = await authAPI.me();
-
     if (res.data.resultCode === ResultCode.Success) {
       return { isLoggedIn: true };
     } else {
@@ -92,6 +47,26 @@ const initializeApp = createAppAsyncThunk<
   } finally {
     dispatch(appActions.setAppInitialized({ isInitialized: true }));
   }
+});
+
+const slice = createSlice({
+  name: "auth",
+  initialState: {
+    isLoggedIn: false,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(login.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn;
+      })
+      .addCase(initializeApp.fulfilled, (state, action) => {
+        state.isLoggedIn = action.payload.isLoggedIn;
+      });
+  },
 });
 
 export const authReducer = slice.reducer;
