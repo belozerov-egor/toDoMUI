@@ -3,7 +3,7 @@ import "./App.css";
 import {TodolistsList} from "features/TodolistsList/TodolistsList";
 import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
 import {useSelector} from "react-redux";
-import {BrowserRouter, Route, Routes} from "react-router-dom";
+import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
 import {Login} from "features/auth/Login";
 import {authThunks} from "features/auth/auth.reducer";
 import {
@@ -32,11 +32,11 @@ function App({ demo = false }: PropsType) {
   const {initializeApp,logout} = useActions(authThunks)
 
   useEffect(() => {
-  initializeApp();
+  initializeApp({});
   }, []);
 
   const logoutHandler = useCallback(() => {
-  logout();
+  logout({});
   }, []);
 
   if (!isInitialized) {
@@ -69,6 +69,7 @@ function App({ demo = false }: PropsType) {
           <Routes>
             <Route path={"/"} element={<TodolistsList demo={demo} />} />
             <Route path={"/login"} element={<Login />} />
+            <Route path="/todoMUI" element={<Navigate to="/" replace />} />
           </Routes>
         </Container>
       </div>
