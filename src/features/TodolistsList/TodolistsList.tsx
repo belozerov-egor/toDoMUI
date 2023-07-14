@@ -26,6 +26,7 @@ export const TodolistsList: FC<PropsType> = ({demo = false}) => {
             return;
         }
         fetchTodolists();
+        debugger
     }, []);
 
     const addTodolist = useCallback(

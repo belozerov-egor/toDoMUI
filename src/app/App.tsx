@@ -4,7 +4,7 @@ import {TodolistsList} from "features/TodolistsList/TodolistsList";
 import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
 import {useSelector} from "react-redux";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
-import {Login} from "features/auth/Login";
+import {Login} from "features/auth/Login/Login";
 import {authThunks} from "features/auth/auth.reducer";
 import {
   AppBar,
