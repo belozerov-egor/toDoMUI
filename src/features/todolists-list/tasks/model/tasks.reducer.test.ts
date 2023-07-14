@@ -1,6 +1,6 @@
-import {TaskPriorities, TaskStatuses} from "common/enums";
-import {tasksReducer, TasksStateType, tasksThunks} from "features/TodolistsList/tasks.reducer";
-import {todolistsThunks} from "features/TodolistsList/todolists.reducer";
+import { TaskPriorities, TaskStatuses } from "common/enums";
+import { tasksReducer, TasksStateType, tasksThunks } from "features/todolists-list/tasks/model/tasks.reducer";
+import { todolistsThunks } from "features/todolists-list/todolists/model/todolists.reducer";
 
 let startState: TasksStateType = {};
 beforeEach(() => {
@@ -182,13 +182,13 @@ test("property with todolistId should be deleted", () => {
 
 test("empty arrays should be added when we set todolists", () => {
   const action = todolistsThunks.fetchTodolists.fulfilled(
-      {
-        todolists: [
-          { id: "1", title: "title 1", order: 0, addedDate: "" },
-          { id: "2", title: "title 2", order: 0, addedDate: "" },
-        ],
-      },
-      "requestId",
+    {
+      todolists: [
+        { id: "1", title: "title 1", order: 0, addedDate: "" },
+        { id: "2", title: "title 2", order: 0, addedDate: "" },
+      ],
+    },
+    "requestId",
   );
 
   const endState = tasksReducer({}, action);
@@ -202,20 +202,20 @@ test("empty arrays should be added when we set todolists", () => {
 
 test("tasks should be added for todolist", () => {
   const action = tasksThunks.fetchTasks.fulfilled(
-      {
-        tasks: startState["todolistId1"],
-        todolistId: "todolistId1",
-      },
-      "requestId",
-      "todolistId1",
+    {
+      tasks: startState["todolistId1"],
+      todolistId: "todolistId1",
+    },
+    "requestId",
+    "todolistId1",
   );
 
   const endState = tasksReducer(
-      {
-        todolistId2: [],
-        todolistId1: [],
-      },
-      action,
+    {
+      todolistId2: [],
+      todolistId1: [],
+    },
+    action,
   );
 
   expect(endState["todolistId1"].length).toBe(3);
