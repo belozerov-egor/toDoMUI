@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect} from "react";
 import "./App.css";
-import {TodolistsList} from "features/todolists-list/todolists/todolists-list";
+import {TodolistsList} from "features/todolists-list/todolists-list";
 import {ErrorSnackbar} from "common/components/ErrorSnackbar/ErrorSnackbar";
 import {useSelector} from "react-redux";
 import {BrowserRouter, Navigate, Route, Routes} from "react-router-dom";
