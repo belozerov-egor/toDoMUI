@@ -1,13 +1,13 @@
 import React, {FC, useCallback, useEffect} from "react";
 import {useSelector} from "react-redux";
-import {todolistsThunks,} from "features/TodolistsList/todolists.reducer";
+import {todolistsThunks,} from "features/todolists-list/todolists/model/todolists.reducer";
 import {Grid, Paper} from "@mui/material";
 import {AddItemForm} from "common/components/AddItemForm/AddItemForm";
-import {Todolist} from "./Todolist/Todolist";
+import {Todolist} from "../../TodolistsList/Todolist/Todolist";
 import {Navigate} from "react-router-dom";
 import {useAppDispatch} from "common/hooks/useAppDispatch";
 import {selectIsLoggedIn} from "features/auth/auth.selectors";
-import {selectTodolists} from "features/TodolistsList/todolists.selectors";
+import {selectTodolists} from "features/todolists-list/todolists/model/todolists.selectors";
 import {useActions} from "common/hooks";
 
 
